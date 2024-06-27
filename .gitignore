@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+/build/
+
+#Config directories and files
+nbproject/
+*~
+
