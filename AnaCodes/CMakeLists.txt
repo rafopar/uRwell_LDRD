@@ -12,8 +12,14 @@ add_executable(CalculatePedestals.exe CalculatePedestals.cc)
 target_link_libraries(CalculatePedestals.exe Hipo4 urwellLDRDlib ${ROOT_LIBRARIES} )
 #################################################################################################
 
+################################  SkimZeroSuppression ##########################################
+add_executable(SkimZeroSuppression.exe SkimZeroSuppression.cc)
+target_link_libraries(SkimZeroSuppression.exe Hipo4 urwellLDRDlib ${ROOT_LIBRARIES} )
+#################################################################################################
+
+
 ################################ Installing Executable targets #############################
-install( TARGETS CalculatePedestals.exe
+install( TARGETS CalculatePedestals.exe SkimZeroSuppression.exe
   DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
 
 ################################ Installing Non target files ###############################
