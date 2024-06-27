@@ -10,7 +10,17 @@
 
 namespace uRwellLDRDTools {
 
+    struct uRwellHit {
+        int sector;
+        int layer;
+        int strip;
+        int stripLocal;
+        double adc;
+        double adcRel;
+        int ts;
+        int slot;
+    };
+
 };
 
 #endif /* URWELLLDRDTOOLS_H */
-
