@@ -17,9 +17,13 @@ add_executable(SkimZeroSuppression.exe SkimZeroSuppression.cc)
 target_link_libraries(SkimZeroSuppression.exe Hipo4 urwellLDRDlib ${ROOT_LIBRARIES} )
 #################################################################################################
 
+################################  AnaData ##########################################
+add_executable(AnaData.exe AnaData.cc)
+target_link_libraries(AnaData.exe Hipo4 urwellLDRDlib ${ROOT_LIBRARIES} )
+#################################################################################################
 
 ################################ Installing Executable targets #############################
-install( TARGETS CalculatePedestals.exe SkimZeroSuppression.exe
+install( TARGETS CalculatePedestals.exe SkimZeroSuppression.exe AnaData.exe
   DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
 
 ################################ Installing Non target files ###############################
