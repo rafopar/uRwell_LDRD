@@ -69,6 +69,8 @@ int main(int argc, char** argv) {
     cout << "The hit threshold is " << HitThr << "\\sigma" << endl;
     cout << "The Minimum cluster size is " << MinClSize << "hits" << endl;
 
+    const double r2d = TMath::RadToDeg();
+
     hipo::reader reader;
     reader.open(inputFile);
 
@@ -105,6 +107,9 @@ int main(int argc, char** argv) {
 
     TH2D h_GEM0_YX_peaktime1("h_GEM0_YX_peaktime1", "", 10, -0.5, 9.5, 10, -0.5, 9.5);
     TH2D h_GEM1_YX_peaktime1("h_GEM1_YX_peaktime1", "", 10, -0.5, 9.5, 10, -0.5, 9.5);
+
+    TH1D h_th_GEMTrk1("h_th_GEMTrk1", "", 200, -30., 30.);
+    TH1D h_cos2Th_GEMTrk1("h_cos2Th_GEMTrk1", "", 200, 0.9, 1.05);
 
     try {
 
@@ -196,6 +201,20 @@ int main(int argc, char** argv) {
 
 
             if (GEM0_XCluster.getHits()->size() > 0 && GEM0_YCluster.getHits()->size() > 0 && GEM1_XCluster.getHits()->size() > 0 && GEM1_YCluster.getHits()->size() > 0) {
+
+                double x_GEM0 = GEM0_XCluster.getAvgStrip() * uRwellLDRDTools::GEM_Strip2Coord;
+                double y_GEM0 = GEM0_YCluster.getAvgStrip() * uRwellLDRDTools::GEM_Strip2Coord;
+                double x_GEM1 = GEM1_XCluster.getAvgStrip() * uRwellLDRDTools::GEM_Strip2Coord;
+                double y_GEM1 = GEM1_YCluster.getAvgStrip() * uRwellLDRDTools::GEM_Strip2Coord;
+
+                double theta = ((x_GEM0 - x_GEM1) / TMath::Abs(x_GEM0 - x_GEM1)) * atan(sqrt((x_GEM0 - x_GEM1)*(x_GEM0 - x_GEM1) + (y_GEM0 - y_GEM1)*(y_GEM0 - y_GEM1)) / uRwellLDRDTools::delta_Z_GEM);
+                double cos_th = cos(theta);
+                double sin_th = sqrt( 1. - cos_th*cos_th );
+
+//                h_th_GEMTrk1.Fill(theta * r2d, 1./sin_th);
+                h_th_GEMTrk1.Fill(TMath::Abs( theta *r2d ), 1./sin_th );
+                h_cos2Th_GEMTrk1.Fill(cos_th * cos_th);
+
                 h_GEM0_X_ADC2.Fill(GEM0_XCluster.getPeakADC());
                 h_GEM0_Y_ADC2.Fill(GEM0_YCluster.getPeakADC());
                 h_GEM1_X_ADC2.Fill(GEM1_XCluster.getPeakADC());

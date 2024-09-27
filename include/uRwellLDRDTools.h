@@ -14,7 +14,8 @@ namespace uRwellLDRDTools {
 
     const int clStripGap = 2; // The Max length of the gap in between strips with a given cluster 
     const double GEM_Strip2Coord = 10./256;
-
+    const double delta_Z_GEM = 44.608750 ; // cm The Delta_Z between GEMs is 17.(9/16) inch, in cm this is 44.608750
+    
     struct uRwellHit {
         int sector;
         int layer;
