@@ -36,6 +36,7 @@ int main(int argc, char** argv) {
 
     options.add_options()
             ("r,Run", "Run number", cxxopts::value<int>())
+            ("f,FileNo", "File number", cxxopts::value<int>())
             ("t,Threshold", "Hit Threshold in terms of sigma", cxxopts::value<double>()->default_value("5"))
             ("m,MinHits", "Number of minimum hits in the cluster", cxxopts::value<int>()->default_value("1"))
             //("f,File", "File number of the given run", cxxopts::value<int>())
@@ -49,12 +50,17 @@ int main(int argc, char** argv) {
 
     if (parsed_options.count("Run")) {
         run = parsed_options["Run"].as<int>();
-        sprintf(inputFile, "Skim_ZeroSuppr_%d_All.hipo", run);
     } else {
         cout << "The run number is nor provided. Exiting..." << endl;
         exit(1);
     }
 
+    if (parsed_options.count("FileNo")) {
+        fnum = parsed_options["FileNo"].as<int>();
+    } else {
+        cout << "The file number is nor provided. Exiting..." << endl;
+        exit(1);
+    }
 
     const double HitThr = parsed_options["Threshold"].as<double>();
     if (!parsed_options.count("Threshold")) {
@@ -71,6 +77,10 @@ int main(int argc, char** argv) {
 
     const double r2d = TMath::RadToDeg();
 
+    /*
+     *  Here is the input file
+     */
+    sprintf(inputFile, "Skim_ZeroSuppr_%d_%d.hipo", run, fnum);
     hipo::reader reader;
     reader.open(inputFile);
 
@@ -87,7 +97,7 @@ int main(int argc, char** argv) {
     hipo::bank bRunConf(factory.getSchema("RUN::config"));
 
 
-    TFile *file_out = new TFile(Form("AnaData_%d_Thr_%1.1f_MinHits_%d.root", run, HitThr, MinClSize), "Recreate");
+    TFile *file_out = new TFile(Form("AnaData_%d_Thr_%1.1f_MinHits_%d_%d.root", run, HitThr, MinClSize, fnum), "Recreate");
 
     TH2D h_n_GEM0_Yvs_X_Hits1("h_n_GEM0_Yvs_X_Hits1", "", 11, -0.5, 10.5, 11, -0.5, 10.5);
     TH2D h_n_GEM1_Yvs_X_Hits1("h_n_GEM1_Yvs_X_Hits1", "", 11, -0.5, 10.5, 11, -0.5, 10.5);
@@ -114,7 +124,7 @@ int main(int argc, char** argv) {
     TH2D h_n_Item1_Y_X_ClSize1("h_n_Item1_Y_X_ClSize1", "", 11, -0.5, 10.5, 11, -0.5, 10.5);
     TH2D h_Item1_YX_peaktime1("h_Item1_YX_peaktime1", "", 10, -0.5, 9.5, 10, -0.5, 9.5);
     TH2D h_Item1_YX_ADC1("h_Item1_YX_ADC1", "", 200, 0., 2000., 200, 0., 2000.);
-    
+
     TH2D h_Item1_YXC1("h_Item1_YXC1", "", 200, -0.1, 10.1, 200, -0.1, 10.1);
 
     try {
@@ -209,16 +219,16 @@ int main(int argc, char** argv) {
 
 
             if (Item1_YCluster.getHits()->size() > 0 && Item1_XCluster.getHits()->size() > 0) {
-                
-                double Item1_X = Item1_XCluster.getAvgStrip()*uRwellLDRDTools::uRwell_Strip2Coord;
-                double Item1_Y = (Item1_YCluster.getAvgStrip() - 128)*uRwellLDRDTools::uRwell_Strip2Coord;
-                
+
+                double Item1_X = Item1_XCluster.getAvgStrip() * uRwellLDRDTools::uRwell_Strip2Coord;
+                double Item1_Y = (Item1_YCluster.getAvgStrip() - 128) * uRwellLDRDTools::uRwell_Strip2Coord;
+
                 h_n_Item1_Y_X_ClSize1.Fill(Item1_XCluster.getHits()->size(), Item1_YCluster.getHits()->size());
-                
-                h_Item1_YX_peaktime1.Fill( Item1_XCluster.getPeakTime(), Item1_YCluster.getPeakTime() );
-                
-                h_Item1_YX_ADC1.Fill( Item1_XCluster.getPeakADC(), Item1_YCluster.getPeakADC() );
-                
+
+                h_Item1_YX_peaktime1.Fill(Item1_XCluster.getPeakTime(), Item1_YCluster.getPeakTime());
+
+                h_Item1_YX_ADC1.Fill(Item1_XCluster.getPeakADC(), Item1_YCluster.getPeakADC());
+
                 h_Item1_YXC1.Fill(Item1_X, Item1_Y);
             }
 
