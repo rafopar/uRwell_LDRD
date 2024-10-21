@@ -63,6 +63,8 @@ int main(int argc, char** argv) {
     
      gStyle->SetOptStat(0);
     
+     std::string keyWord = Form("%d_t%1.1f_m%d", run, threshold, MinClSize);
+     
     TCanvas *c1 = new TCanvas("c1", "", 950, 950);
     c1->SetTopMargin(0.04);
     c1->SetRightMargin(0.04);
@@ -178,5 +180,57 @@ int main(int argc, char** argv) {
     c1->Print(Form("Figs/GEM1_Y_peaktime_%d_t%1.1f_m%d.png", run, threshold, MinClSize));
     c1->Print(Form("Figs/GEM1_Y_peaktime_%d_t%1.1f_m%d.root", run, threshold, MinClSize));
     
+    TH2D *h_Item1_YX_peaktime1 = (TH2D*)file_in->Get("h_Item1_YX_peaktime1");
+    h_Item1_YX_peaktime1->SetTitle("; X peak time sample; Y peak time sample");
+    h_Item1_YX_peaktime1->Draw("");
+    c1->Print(Form("Figs/Item1_Peak_time_YX1_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_Peak_time_YX1_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_Peak_time_YX1_%s.root", keyWord.c_str()));
+    
+    TH1D *h_X_Peaktime1 = (TH1D*)h_Item1_YX_peaktime1->ProjectionX("h_X_Peaktime1", 1, h_Item1_YX_peaktime1->GetNbinsY() );
+    h_X_Peaktime1->Draw();
+    c1->Print(Form("Figs/Item1_X_Peak_time_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_X_Peak_time_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_X_Peak_time_%s.root", keyWord.c_str()));
+    
+    TH1D *h_Y_Peaktime1 = (TH1D*)h_Item1_YX_peaktime1->ProjectionY("h_Y_Peaktime1", 1, h_Item1_YX_peaktime1->GetNbinsX() );
+    h_Y_Peaktime1->Draw();
+    c1->Print(Form("Figs/Item1_Y_Peak_time_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_Y_Peak_time_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_Y_Peak_time_%s.root", keyWord.c_str()));
+    
+    TH2D *h_Item1_YXC1 = (TH2D*)file_in->Get("h_Item1_YXC1");
+    h_Item1_YXC1->SetTitle(";Cluster X [cm]; Cluster Y [cm]");
+    h_Item1_YXC1->SetMaximum( 5.*h_Item1_YXC1->GetEntries()/( h_Item1_YXC1->GetNbinsX()*h_Item1_YXC1->GetNbinsY() ) );
+    h_Item1_YXC1->Draw();
+    c1->Print(Form("Figs/Item1_YXc_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_YXc_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_YXc_%s.root", keyWord.c_str()));
+    
+    TH2D *h_Item1_YX_ADC1 = (TH2D*)file_in->Get("h_Item1_YX_ADC1");
+    h_Item1_YX_ADC1->SetTitle("; ADC_X; ADC_Y");
+    h_Item1_YX_ADC1->Draw();
+    c1->Print(Form("Figs/Item1_ADC_YX_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_ADC_YX_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_ADC_YX_%s.root", keyWord.c_str()));
+    
+    TH1D *h_Item1_ADC_X = (TH1D*)h_Item1_YX_ADC1->ProjectionX("h_Item1_ADC_X", 1, h_Item1_YX_ADC1->GetNbinsY());
+    h_Item1_ADC_X->SetAxisRange(0., adcMaxAxis);
+    h_Item1_ADC_X->Draw();
+    f_Landau->SetParameters(5. * h_Item1_ADC_X->GetMaximum(), h_Item1_ADC_X->GetBinCenter(h_Item1_ADC_X->GetMaximumBin()), 10);
+    h_Item1_ADC_X->Fit( f_Landau, "MeV", "", 0., adcMaxAxis );
+    c1->Print(Form("Figs/Item1_ADC_X_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_ADC_X_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_ADC_X_%s.root", keyWord.c_str()));
+
+    TH1D *h_Item1_ADC_Y = (TH1D*)h_Item1_YX_ADC1->ProjectionY("h_Item1_ADC_Y", 1, h_Item1_YX_ADC1->GetNbinsX());
+    h_Item1_ADC_Y->SetAxisRange(0., adcMaxAxis);
+    h_Item1_ADC_Y->Draw();
+    f_Landau->SetParameters(5. * h_Item1_ADC_Y->GetMaximum(), h_Item1_ADC_Y->GetBinCenter(h_Item1_ADC_Y->GetMaximumBin()), 10);
+    h_Item1_ADC_Y->Fit( f_Landau, "MeV", "", 0., adcMaxAxis );
+    c1->Print(Form("Figs/Item1_ADC_Y_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_ADC_Y_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item1_ADC_Y_%s.root", keyWord.c_str()));
+
     return 0;
 }
