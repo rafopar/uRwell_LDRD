@@ -232,5 +232,59 @@ int main(int argc, char** argv) {
     c1->Print(Form("Figs/Item1_ADC_Y_%s.png", keyWord.c_str()));
     c1->Print(Form("Figs/Item1_ADC_Y_%s.root", keyWord.c_str()));
 
+    
+    
+    TH2D *h_Item2_YX_peaktime1 = (TH2D*)file_in->Get("h_Item2_YX_peaktime1");
+    h_Item2_YX_peaktime1->SetTitle("; X peak time sample; Y peak time sample");
+    h_Item2_YX_peaktime1->Draw("");
+    c1->Print(Form("Figs/Item2_Peak_time_YX1_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_Peak_time_YX1_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_Peak_time_YX1_%s.root", keyWord.c_str()));
+    
+    TH1D *h_Item2_X_Peaktime1 = (TH1D*)h_Item2_YX_peaktime1->ProjectionX("h_Item2_X_Peaktime1", 1, h_Item2_YX_peaktime1->GetNbinsY() );
+    h_Item2_X_Peaktime1->Draw();
+    c1->Print(Form("Figs/Item2_X_Peak_time_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_X_Peak_time_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_X_Peak_time_%s.root", keyWord.c_str()));
+    
+    TH1D *h_Item2_Y_Peaktime1 = (TH1D*)h_Item2_YX_peaktime1->ProjectionY("h_Item2_Y_Peaktime1", 1, h_Item2_YX_peaktime1->GetNbinsX() );
+    h_Item2_Y_Peaktime1->Draw();
+    c1->Print(Form("Figs/Item2_Y_Peak_time_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_Y_Peak_time_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_Y_Peak_time_%s.root", keyWord.c_str()));
+    
+    TH2D *h_Item2_YXC1 = (TH2D*)file_in->Get("h_Item2_YXC1");
+    h_Item2_YXC1->SetTitle(";Cluster X [cm]; Cluster Y [cm]");
+    h_Item2_YXC1->SetMaximum( 5.*h_Item2_YXC1->GetEntries()/( h_Item2_YXC1->GetNbinsX()*h_Item2_YXC1->GetNbinsY() ) );
+    h_Item2_YXC1->Draw();
+    c1->Print(Form("Figs/Item2_YXc_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_YXc_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_YXc_%s.root", keyWord.c_str()));
+    
+    TH2D *h_Item2_YX_ADC1 = (TH2D*)file_in->Get("h_Item2_YX_ADC1");
+    h_Item2_YX_ADC1->SetTitle("; ADC_X; ADC_Y");
+    h_Item2_YX_ADC1->Draw();
+    c1->Print(Form("Figs/Item2_ADC_YX_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_ADC_YX_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_ADC_YX_%s.root", keyWord.c_str()));
+    
+    TH1D *h_Item2_ADC_X = (TH1D*)h_Item2_YX_ADC1->ProjectionX("h_Item2_ADC_X", 1, h_Item2_YX_ADC1->GetNbinsY());
+    h_Item2_ADC_X->SetAxisRange(0., adcMaxAxis);
+    h_Item2_ADC_X->Draw();
+    f_Landau->SetParameters(5. * h_Item2_ADC_X->GetMaximum(), h_Item2_ADC_X->GetBinCenter(h_Item2_ADC_X->GetMaximumBin()), 10);
+    h_Item2_ADC_X->Fit( f_Landau, "MeV", "", 0., adcMaxAxis );
+    c1->Print(Form("Figs/Item2_ADC_X_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_ADC_X_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_ADC_X_%s.root", keyWord.c_str()));
+
+    TH1D *h_Item2_ADC_Y = (TH1D*)h_Item2_YX_ADC1->ProjectionY("h_Item2_ADC_Y", 1, h_Item2_YX_ADC1->GetNbinsX());
+    h_Item2_ADC_Y->SetAxisRange(0., adcMaxAxis);
+    h_Item2_ADC_Y->Draw();
+    f_Landau->SetParameters(5. * h_Item2_ADC_Y->GetMaximum(), h_Item2_ADC_Y->GetBinCenter(h_Item2_ADC_Y->GetMaximumBin()), 10);
+    h_Item2_ADC_Y->Fit( f_Landau, "MeV", "", 0., adcMaxAxis );
+    c1->Print(Form("Figs/Item2_ADC_Y_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_ADC_Y_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item2_ADC_Y_%s.root", keyWord.c_str()));
+
     return 0;
 }
