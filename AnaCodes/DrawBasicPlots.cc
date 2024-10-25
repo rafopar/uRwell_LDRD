@@ -20,6 +20,8 @@
 
 using namespace std;
 
+template <typename T> void FormarHist_1(TCanvas *c, T h );
+
 /*
  * 
  */
@@ -200,6 +202,7 @@ int main(int argc, char** argv) {
     c1->Print(Form("Figs/Item1_Y_Peak_time_%s.root", keyWord.c_str()));
     
     TH2D *h_Item1_YXC1 = (TH2D*)file_in->Get("h_Item1_YXC1");
+    FormarHist_1(c1, h_Item1_YXC1);
     h_Item1_YXC1->SetTitle(";Cluster X [cm]; Cluster Y [cm]");
     h_Item1_YXC1->SetMaximum( 5.*h_Item1_YXC1->GetEntries()/( h_Item1_YXC1->GetNbinsX()*h_Item1_YXC1->GetNbinsY() ) );
     h_Item1_YXC1->Draw();
@@ -214,20 +217,25 @@ int main(int argc, char** argv) {
     c1->Print(Form("Figs/Item1_ADC_YX_%s.png", keyWord.c_str()));
     c1->Print(Form("Figs/Item1_ADC_YX_%s.root", keyWord.c_str()));
     
+    lat1->SetTextSize(0.06);
     TH1D *h_Item1_ADC_X = (TH1D*)h_Item1_YX_ADC1->ProjectionX("h_Item1_ADC_X", 1, h_Item1_YX_ADC1->GetNbinsY());
     h_Item1_ADC_X->SetAxisRange(0., adcMaxAxis);
+    FormarHist_1(c1, h_Item1_ADC_X);
     h_Item1_ADC_X->Draw();
     f_Landau->SetParameters(5. * h_Item1_ADC_X->GetMaximum(), h_Item1_ADC_X->GetBinCenter(h_Item1_ADC_X->GetMaximumBin()), 10);
     h_Item1_ADC_X->Fit( f_Landau, "MeV", "", 0., adcMaxAxis );
+    lat1->DrawLatex(0.55, 0.7, Form("MPV = %1.1f", f_Landau->GetParameter(1)));
     c1->Print(Form("Figs/Item1_ADC_X_%s.pdf", keyWord.c_str()));
     c1->Print(Form("Figs/Item1_ADC_X_%s.png", keyWord.c_str()));
     c1->Print(Form("Figs/Item1_ADC_X_%s.root", keyWord.c_str()));
 
     TH1D *h_Item1_ADC_Y = (TH1D*)h_Item1_YX_ADC1->ProjectionY("h_Item1_ADC_Y", 1, h_Item1_YX_ADC1->GetNbinsX());
     h_Item1_ADC_Y->SetAxisRange(0., adcMaxAxis);
+    FormarHist_1(c1, h_Item1_ADC_Y);
     h_Item1_ADC_Y->Draw();
     f_Landau->SetParameters(5. * h_Item1_ADC_Y->GetMaximum(), h_Item1_ADC_Y->GetBinCenter(h_Item1_ADC_Y->GetMaximumBin()), 10);
     h_Item1_ADC_Y->Fit( f_Landau, "MeV", "", 0., adcMaxAxis );
+    lat1->DrawLatex(0.55, 0.7, Form("MPV = %1.1f", f_Landau->GetParameter(1)));
     c1->Print(Form("Figs/Item1_ADC_Y_%s.pdf", keyWord.c_str()));
     c1->Print(Form("Figs/Item1_ADC_Y_%s.png", keyWord.c_str()));
     c1->Print(Form("Figs/Item1_ADC_Y_%s.root", keyWord.c_str()));
@@ -287,4 +295,19 @@ int main(int argc, char** argv) {
     c1->Print(Form("Figs/Item2_ADC_Y_%s.root", keyWord.c_str()));
 
     return 0;
+}
+
+template <typename T>
+void FormarHist_1(TCanvas *c, T h){
+
+    h->SetLineWidth(2);
+    c->SetBottomMargin(0.12);
+    h->GetXaxis()->SetLabelSize(0.06);
+    h->GetXaxis()->SetTitleSize(0.06);
+    c->SetLeftMargin(0.14);
+    h->GetYaxis()->SetLabelSize(0.06);
+    h->GetYaxis()->SetLabelOffset(0.01);
+    h->GetYaxis()->SetTitleSize(0.06);
+    h->GetYaxis()->SetTitleOffset(1.1);
+    
 }
