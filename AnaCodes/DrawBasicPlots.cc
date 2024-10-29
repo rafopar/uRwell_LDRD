@@ -263,6 +263,7 @@ int main(int argc, char** argv) {
     
     TH2D *h_Item2_YXC1 = (TH2D*)file_in->Get("h_Item2_YXC1");
     h_Item2_YXC1->SetTitle(";Cluster X [cm]; Cluster Y [cm]");
+    FormarHist_1(c1, h_Item2_YXC1);
     h_Item2_YXC1->SetMaximum( 5.*h_Item2_YXC1->GetEntries()/( h_Item2_YXC1->GetNbinsX()*h_Item2_YXC1->GetNbinsY() ) );
     h_Item2_YXC1->Draw();
     c1->Print(Form("Figs/Item2_YXc_%s.pdf", keyWord.c_str()));
