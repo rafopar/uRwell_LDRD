@@ -7,8 +7,13 @@ This package contain analysis codes for the high rate $\mu RWell$ detector proto
 ## Decoding
 Before going into details of the installation, please make sure you have the correct version of the coatjava and the sqlite file.
 
-Please use the following version of the coatjava
+Please use the a specific branch of coatjava
 `git@github.com:rafopar/coatjava.git`
+`git checkout 2-implement-vmm3-decoding-the-version-of-jastrzembski`
+
+To compile run
+`./build-coatjava.sh`
+
 
 For the sqlite file you need to use the file which is located in work disk
 `/work/clas12/rafopar/uRWELL/Readout/TT_Tests/LDRD.sqlite`
