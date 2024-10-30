@@ -8,8 +8,8 @@ This package contain analysis codes for the high rate $\mu RWell$ detector proto
 Before going into details of the installation, please make sure you have the correct version of the coatjava and the sqlite file.
 
 Please use the a specific branch of coatjava
-`git@github.com:rafopar/coatjava.git`
 
+`git clone git@github.com:rafopar/coatjava.git`
 `git checkout 2-implement-vmm3-decoding-the-version-of-jastrzembski`
 
 To compile run
