@@ -98,7 +98,6 @@ Decoded files are huge, and there is no Zero suppression on $\mu RWell$ hits. It
 - **adc** is the extracted ADC value.
 - **adcRel** is ADC in units of the RMS of the given channel. As an example if the given channel has RMS 5, and the ADC is 55, then the adcRel = adc/RMS = 5.5.
 - **ts** is the time sample of the highest ADC of the given hit
-- **slot** the slot (aka hybrid) number the given hit is readout. This is also a variable for convenience, as otherwise it can be deduced from the Translation Table.
 
   An example events is shown below. It has 1 hit in Item1 ,layer 1, and 2 hits in Item 2 layer 1
 
@@ -111,3 +110,11 @@ Decoded files are huge, and there is no Zero suppression on $\mu RWell$ hits. It
           `adc :    15.8889   18.0000   17.4444`  
        `adcRel :     3.3061    3.6906    3.2958`  
            `ts :          7         5         2`
+
+To run executable for running the Zero Suppresion, is `./SkimZeroSuppression.exe`, it takes two arguments, the run number and the file index.
+
+`./SkimZeroSuppression.exe $RUN $FILE_IND`
+
+It will produce a file named `Skim_ZeroSuppr_$RUN$_$FILE_IND$.hipo`
+
+Note: `SkimZeroSuppression.exe` needs to know pedestals for each channel, and it will look for a file `PedFiles/Pedestals_$RUN$.dat`. Usually, before running the `SkimZeroSuppression.exe`, one can link the pedestal file to the most recent Pedestal file created by the `CalculatePedestals.exe` executable.
