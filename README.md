@@ -63,3 +63,51 @@ When your installation is finished, the directory following directory structures
        `└── urwellLDRDLib.pc`
 
 The `lib` directory contains libraries, in the `bin` you will find executables and two subdirectories, `Figs` and `PedFiles` where you should expect figures and Pedestal files to be added.
+
+
+## Analyzing Pedestal runs
+
+From time to time there is a need to take pedestal runs and analyze data, which includes:
+* Calculating pedestals for all channels
+* Writing pedestals to an appropriate files
+* Making plots, e.g.:
+	* mean and $\sigma$ of the RMS as a function of channel for each Hybrid
+	* 2D RMS vs channel
+
+To do this, assuming you have already decoded the run, you should run the command
+`./CalculatePedestals.exe $RUN` 
+where $Run is the run number.
+
+It will analyze the data, calculated pedestals, write Pedestals file `PedFiles/Pedestals_$RUN.dat`, it also will draw plots and save them in the subdirectory `Figs`.  File names are usually self-explanatory.
+
+## Zero suppression skim
+
+Decoded files are huge, and there is no Zero suppression on $\mu RWell$ hits. It is not practical to run do regular analysis on those file. Instead We first do a skim, which keeps only hits that are at least $3\sigma$ above the pedestal. This is rather loose skim, however enormously reduces the file, size and also makes the analysis on those file very fast.
+
+ In addition the $\mu RWell$  hits are written in the new more compact bank named "**uRwell::Hit**". This bank has following variables:
+ - **sec** is the sector, in our case, it is a detector identifier: with the following mapping:
+	 - 0: GEM0
+	 - 1: GEM1
+	 - 2: Item1
+	 - 3: Item2
+	 - 4: Item3
+	 - 5: Item4
+- **layer** is the layer: 1=Xstrips, 2=Ystrips.
+- **strip** is the strip number.
+- **stripLocal** is just for convenience, it ranges from 1 to 128, and represents the connector pin number of the hit in the given Hybrid.
+- **adc** is the extracted ADC value.
+- **adcRel** is ADC in units of the RMS of the given channel. As an example if the given channel has RMS 5, and the ADC is 55, then the adcRel = adc/RMS = 5.5.
+- **ts** is the time sample of the highest ADC of the given hit
+- **slot** the slot (aka hybrid) number the given hit is readout. This is also a variable for convenience, as otherwise it can be deduced from the Translation Table.
+
+  An example events is shown below. It has 1 hit in Item1 ,layer 1, and 2 hits in Item 2 layer 1
+
+`uRwell::Hitext,p=previous, q=quit, h=help), Type Bank Name or id : uRwell::Hit`  
+`position for [uRwell::Hit] == 310`  
+* `NODE * group =     90, item =   1, type = 11, size =       48`  
+          `sec :          2         3         3`  
+        `layer :          1         1         1`  
+        `strip :         67        37       109`  
+          `adc :    15.8889   18.0000   17.4444`  
+       `adcRel :     3.3061    3.6906    3.2958`  
+           `ts :          7         5         2`
