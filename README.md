@@ -9,6 +9,7 @@ Before going into details of the installation, please make sure you have the cor
 
 Please use the a specific branch of coatjava
 `git@github.com:rafopar/coatjava.git`
+
 `git checkout 2-implement-vmm3-decoding-the-version-of-jastrzembski`
 
 To compile run
