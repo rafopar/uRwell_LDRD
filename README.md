@@ -118,3 +118,10 @@ To run executable for running the Zero Suppresion, is `./SkimZeroSuppression.exe
 It will produce a file named `Skim_ZeroSuppr_$RUN$_$FILE_IND$.hipo`
 
 Note: `SkimZeroSuppression.exe` needs to know pedestals for each channel, and it will look for a file `PedFiles/Pedestals_$RUN$.dat`. Usually, before running the `SkimZeroSuppression.exe`, one can link the pedestal file to the most recent Pedestal file created by the `CalculatePedestals.exe` executable.
+
+## Analyzing the data
+
+To be added...
+
+## Drawing Plots
+To be added...
