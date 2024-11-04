@@ -126,10 +126,10 @@ To run use
 
 `./AnaData.exe -r $RUN -f $FILE_IND -t $THRESHOLD -m $MINHITS`
 
-* $RUN is the run number
-* $FILE_IND is the index of a file in the given run
-* $THRESHOLD is the threshold on hits you would like to use in the analysis. It is in units of $\sigma$
-* $MINHITS is the minimum number of hits you would like to use in the analysis
+* **$RUN** is the run number
+* **$FILE_IND** is the index of a file in the given run
+* **$THRESHOLD** is the threshold on hits you would like to use in the analysis. It is in units of $\sigma$
+* **$MINHITS** is the minimum number of hits you would like to use in the analysis
 
 Newer analysis histograms should be added in this code AnaData.cc, or new Analysis codes should be developed.
 
