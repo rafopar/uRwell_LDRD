@@ -121,7 +121,22 @@ Note: `SkimZeroSuppression.exe` needs to know pedestals for each channel, and it
 
 ## Analyzing the data
 
-To be added...
+There is an analysis code, that runs over skimmed file and produces histograms.
+To run use
+
+`./AnaData.exe -r $RUN -f $FILE_IND -t $THRESHOLD -m $MINHITS`
+
+* $RUN is the run number
+* $FILE_IND is the index of a file in the given run
+* $THRESHOLD is the threshold on hits you would like to use in the analysis. It is in units of $\sigma$
+* $MINHITS is the minimum number of hits you would like to use in the analysis
+
+Newer analysis histograms should be added in this code AnaData.cc, or new Analysis codes should be developed.
 
 ## Drawing Plots
-To be added...
+The executable `DrawBasicPlots.exe` reads the output root file of the `AnaData.exe`, makes plots then saves them in the sub-directory `Figs`.
+
+To run use
+`./DrawBasicPlots.exe -r $RUN -f $FILE_IND -t $THRESHOLD -m $MINHITS`
+
+Meaning of arguments is the same in the paragraph "**Analyzing the data**"
