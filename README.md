@@ -137,6 +137,6 @@ Newer analysis histograms should be added in this code AnaData.cc, or new Analys
 The executable `DrawBasicPlots.exe` reads the output root file of the `AnaData.exe`, makes plots then saves them in the sub-directory `Figs`.
 
 To run use
-`./DrawBasicPlots.exe -r $RUN -f $FILE_IND -t $THRESHOLD -m $MINHITS`
+`./DrawBasicPlots.exe -r $RUN -t $THRESHOLD -m $MINHITS`
 
 Meaning of arguments is the same in the paragraph "**Analyzing the data**"
