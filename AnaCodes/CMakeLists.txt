@@ -27,9 +27,14 @@ add_executable(DrawBasicPlots.exe DrawBasicPlots.cc)
 target_link_libraries(DrawBasicPlots.exe Hipo4 urwellLDRDlib ${ROOT_LIBRARIES} )
 #################################################################################################
 
+################################ DrawBasicPlots ##########################################
+add_executable(DrawHVDependencePlots.exe DrawHVDependencePlots.cc)
+target_link_libraries(DrawHVDependencePlots.exe ${ROOT_LIBRARIES} )
+#################################################################################################
+
 
 ################################ Installing Executable targets #############################
-install( TARGETS CalculatePedestals.exe SkimZeroSuppression.exe AnaData.exe DrawBasicPlots.exe
+install( TARGETS CalculatePedestals.exe SkimZeroSuppression.exe AnaData.exe DrawBasicPlots.exe DrawHVDependencePlots.exe
   DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
 
 ################################ Installing Non target files ###############################
