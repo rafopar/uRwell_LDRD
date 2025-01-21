@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     char outputFile[256];
     char inputFile[256];
 
-    int run = 0;
+    int run = 0 ;
     int fnum = -1;
     if (argc > 2) {
         run = atoi(argv[1]);
