@@ -30,7 +30,11 @@ using namespace std;
 int main(int argc, char** argv) {
 
     char outputFile[256];
-    char inputFile[256];
+    char inputFile[256]; 
+
+    int totalTracks_Item1 = 0, matchedHits_Item1 = 0;
+    int totalTracks_Item2 = 0, matchedHits_Item2 = 0;
+    int totalTracks_Item3 = 0, matchedHits_Item3 = 0; 
 
     cxxopts::Options options("AnaClustering", "Performs clustering and also does analysis on cosmic data");
 
@@ -131,9 +135,32 @@ int main(int argc, char** argv) {
     TH2D h_Item2_YX_ADC1("h_Item2_YX_ADC1", "", 200, 0., 2000., 200, 0., 2000.);
     TH2D h_Item2_YXC1("h_Item2_YXC1", "", 200, -0.1, 10.1, 200, -0.1, 10.1);
 
+    TH2D h_n_Item3_Y_X_ClSize1("h_n_Item3_Y_X_ClSize1", "", 11, -0.5, 10.5, 11, -0.5, 10.5);
+    TH2D h_Item3_YX_peaktime1("h_Item3_YX_peaktime1", "", 10, -0.5, 9.5, 10, -0.5, 9.5);
+    TH2D h_Item3_YX_ADC1("h_Item3_YX_ADC1", "", 200, 0., 2000., 200, 0., 2000.);
+    TH2D h_Item3_YXC1("h_Item3_YXC1", "", 200, -0.1, 10.1, 200, -0.1, 10.1);
+
+    TH2D h_totalTracks_Item1("h_totalTracks_Item1", "Total Tracks for Item1; X [cm]; Y [cm]", 50, 0, 10, 50, 0, 10);
+    TH2D h_matchedHits_Item1("h_matchedHits_Item1", "Matched Hits for Item1; X [cm]; Y [cm]", 50, 0, 10, 50, 0, 10);
+
+    TH2D h_totalTracks_Item2("h_totalTracks_Item2", "Total Tracks for Item2; X [cm]; Y [cm]", 50, 0, 10, 50, 0, 10);
+    TH2D h_matchedHits_Item2("h_matchedHits_Item2", "Matched Hits for Item2; X [cm]; Y [cm]", 50, 0, 10, 50, 0, 10);
+
+    TH2D h_totalTracks_Item3("h_totalTracks_Item3", "Total Tracks for Item3; X [cm]; Y [cm]", 50, 0, 10, 50, 0, 10);
+    TH2D h_matchedHits_Item3("h_matchedHits_Item3", "Matched Hits for Item3; X [cm]; Y [cm]", 50, 0, 10, 50, 0, 10);
+
+    TH1D h_Item1_X_residual("h_Item1_X_residual", "Track residual for Item 1 - X axis; X [cm]", 50, -5, 5);
+    TH1D h_Item2_X_residual("h_Item2_X_residual", "Track residual for Item 2 - X axis; X [cm]", 50, -5, 5);
+    TH1D h_Item3_X_residual("h_Item3_X_residual", "Track residual for Item 3 - X axis; X [cm]", 50, -5, 5);
+    TH1D h_Item1_Y_residual("h_Item1_Y_residual", "Track residual for Item 1 - Y axis; Y [cm]", 50, -5, 5);
+    TH1D h_Item2_Y_residual("h_Item2_Y_residual", "Track residual for Item 2 - Y axis; Y [cm]", 50, -5, 5);
+    TH1D h_Item3_Y_residual("h_Item3_Y_residual", "Track residual for Item 3 - Y axis; Y [cm]", 50, -5, 5);
+    
+
+
     try {
 
-        while (reader.next() == true) {
+        while (reader.next() == true) { 
             reader.read(event);
 
             evCounter = evCounter + 1;
@@ -158,6 +185,8 @@ int main(int argc, char** argv) {
             vector<uRwellHit> v_Item1_YHits;
             vector<uRwellHit> v_Item2_XHits;
             vector<uRwellHit> v_Item2_YHits;
+            vector<uRwellHit> v_Item3_XHits;
+            vector<uRwellHit> v_Item3_YHits;
 
 
             for (int ihit = 0; ihit < n_Hits; ihit++) {
@@ -224,7 +253,15 @@ int main(int argc, char** argv) {
                     } else {
                         cout << "This should not happen!!! wrong (sector,layer)...   (" << curHit.sector<<"," << curHit.layer << ")" << endl;
                     }
-                }
+                } else if (curHit.sector == det_uRWELL2) {
+
+                    if (curHit.layer == 1) {
+                        v_Item3_XHits.push_back(curHit);
+                    } else if (curHit.layer == 2) {
+                        v_Item3_YHits.push_back(curHit);
+                    } else {
+                        cout << "This should not happen!!! wrong (sector,layer)...   (" << curHit.sector<<"," << curHit.layer << ")" << endl;
+                    }
             }
 
 
@@ -244,7 +281,8 @@ int main(int argc, char** argv) {
     vector< uRwellCluster > v_Item2_Yclusters = uRwellLDRDTools::getClusters(v_Item2_YHits);
     vector< uRwellCluster > v_Item2_Xclusters = uRwellLDRDTools::getClusters(v_Item2_XHits);
 
-
+    vector< uRwellCluster > v_Item3_Yclusters = uRwellLDRDTools::getClusters(v_Item3_YHits);
+    vector< uRwellCluster > v_Item3_Xclusters = uRwellLDRDTools::getClusters(v_Item3_XHits);
 
     h_n_GEM0_Yvs_X_Hits1.Fill(v_GEM0_Xclusters.size(), v_GEM0_Yclusters.size());
     h_n_GEM1_Yvs_X_Hits1.Fill(v_GEM1_Xclusters.size(), v_GEM1_Yclusters.size());
@@ -260,6 +298,9 @@ int main(int argc, char** argv) {
 
     uRwellCluster Item2_YCluster = getMaxAdcCluster(v_Item2_Yclusters, MinClSize);
     uRwellCluster Item2_XCluster = getMaxAdcCluster(v_Item2_Xclusters, MinClSize);
+
+    uRwellCluster Item3_YCluster = getMaxAdcCluster(v_Item3_Yclusters, MinClSize);
+    uRwellCluster Item3_XCluster = getMaxAdcCluster(v_Item3_Xclusters, MinClSize);
 
 
     if (Item1_YCluster.getHits()->size() > 0 && Item1_XCluster.getHits()->size() > 0) {
@@ -289,6 +330,22 @@ int main(int argc, char** argv) {
 
         h_Item2_YXC1.Fill(Item2_X, Item2_Y);
     }
+
+    if (Item3_YCluster.getHits()->size() > 0 && Item3_XCluster.getHits()->size() > 0) {
+
+        double Item3_X = Item3_XCluster.getAvgStrip() * uRwellLDRDTools::uRwell_Strip2Coord;
+        double Item3_Y = Item3_YCluster.getAvgStrip() * uRwellLDRDTools::uRwell_Strip2Coord;
+
+        h_n_Item3_Y_X_ClSize1.Fill(Item3_XCluster.getHits()->size(), Item3_YCluster.getHits()->size());
+
+        h_Item3_YX_peaktime1.Fill(Item3_XCluster.getPeakTime(), Item3_YCluster.getPeakTime());
+
+        h_Item3_YX_ADC1.Fill(Item3_XCluster.getPeakADC(), Item3_YCluster.getPeakADC());
+
+        h_Item3_YXC1.Fill(Item3_X, Item3_Y);
+    }
+
+
 
 
     if (GEM0_XCluster.getHits()->size() > 0 && GEM0_YCluster.getHits()->size() > 0) {
@@ -334,7 +391,87 @@ int main(int argc, char** argv) {
         h_GEM1_X_ADC2.Fill(GEM1_XCluster.getPeakADC());
         h_GEM1_Y_ADC2.Fill(GEM1_YCluster.getPeakADC());
     }
+
+
+
+    // Get cluster positions
+    double x_Item1 = Item1_XCluster.getAvgStrip() * uRwellLDRDTools::uRwell_Strip2Coord;
+    double y_Item1 = Item1_YCluster.getAvgStrip() * uRwellLDRDTools::uRwell_Strip2Coord;
+    double x_Item2 = Item2_XCluster.getAvgStrip() * uRwellLDRDTools::uRwell_Strip2Coord;
+    double y_Item2 = Item2_YCluster.getAvgStrip() * uRwellLDRDTools::uRwell_Strip2Coord;
+    double x_Item3 = Item3_XCluster.getAvgStrip() * uRwellLDRDTools::uRwell_Strip2Coord;
+    double y_Item3 = Item3_YCluster.getAvgStrip() * uRwellLDRDTools::uRwell_Strip2Coord;
+
+    double threshold = 1.0;
+    const double z_Item1 = 15.0; // cm
+    const double z_Item2 = 24.0; // cm
+    const double z_Item3 = 33.0; // cm 
+
+    // Efficiency for Item3 using Item1 and Item2
+    if (Item1_XCluster.getHits()->size() > 0 && Item1_YCluster.getHits()->size() > 0 &&
+    Item2_XCluster.getHits()->size() > 0 && Item2_YCluster.getHits()->size() > 0 ) {
+        double x_proj_Item3 = x_Item2 + (x_Item2 - x_Item1) * (z_Item3 - z_Item2) / (z_Item2 - z_Item1);
+        double y_proj_Item3 = y_Item2 + (y_Item2 - y_Item1) * (z_Item3 - z_Item2) / (z_Item2 - z_Item1);
+        if (x_proj_Item3 >= 0 && x_proj_Item3 <= 10 && y_proj_Item3 >= 0 && y_proj_Item3 <= 10) {
+        totalTracks_Item3++;
+
+        if (fabs(x_proj_Item3 - x_Item3) <= threshold && fabs(y_proj_Item3 - y_Item3) <= threshold) {
+            matchedHits_Item3++;
+            h_matchedHits_Item3.Fill(x_proj_Item3, y_proj_Item3); // Fill projected positions
+        }
+            h_Item3_X_residual.Fill(x_proj_Item3 - x_Item3);
+            h_Item3_Y_residual.Fill(y_proj_Item3 - y_Item3);
+
+            h_totalTracks_Item3.Fill(x_proj_Item3, y_proj_Item3); // Fill all tracks
+    }
+    }
+
+    // Efficiency for Item1 using Item2 and Item3
+    
+    if (Item2_XCluster.getHits()->size() > 0 && Item2_YCluster.getHits()->size() > 0 &&
+    Item3_XCluster.getHits()->size() > 0 && Item3_YCluster.getHits()->size() > 0) {
+        double x_proj_Item1 = x_Item2 + (x_Item2 - x_Item3) * (z_Item1 - z_Item2) / (z_Item2 - z_Item3);
+        double y_proj_Item1 = y_Item2 + (y_Item2 - y_Item3) * (z_Item1 - z_Item2) / (z_Item2 - z_Item3);
+        if (x_proj_Item1 >= 0 && x_proj_Item1 <= 10 && y_proj_Item1 >= 0 && y_proj_Item1 <= 10) {
+        totalTracks_Item1++;
+
+        if (fabs(x_proj_Item1 - x_Item1) <= threshold && fabs(y_proj_Item1 - y_Item1) <= threshold) {
+            matchedHits_Item1++;
+            h_matchedHits_Item1.Fill(x_proj_Item1, y_proj_Item1); 
+        }
+            h_Item1_X_residual.Fill(x_proj_Item1 - x_Item1);
+            h_Item1_Y_residual.Fill(y_proj_Item1 - y_Item1);
+
+            h_totalTracks_Item1.Fill(x_proj_Item1, y_proj_Item1); 
+    }
+    }
+
+    // Efficiency for Item2 using Item1 and Item3
+    
+
+    if (Item1_XCluster.getHits()->size() > 0 && Item1_YCluster.getHits()->size() > 0 &&
+    Item3_XCluster.getHits()->size() > 0 && Item3_YCluster.getHits()->size() > 0) {
+        double x_proj_Item2 = x_Item1 + (x_Item1 - x_Item3) * (z_Item2 - z_Item1) / (z_Item1 - z_Item3);
+        double y_proj_Item2 = y_Item1 + (y_Item1 - y_Item3) * (z_Item2 - z_Item1) / (z_Item1 - z_Item3);
+        if (x_proj_Item2 >= 0 && x_proj_Item2 <= 10 && y_proj_Item2 >= 0 && y_proj_Item2 <= 10) {
+        totalTracks_Item2++;
+
+        if (fabs(x_proj_Item2 - x_Item2) <= threshold && fabs(y_proj_Item2 - y_Item2) <= threshold) {
+            matchedHits_Item2++;
+            h_matchedHits_Item2.Fill(x_proj_Item2, y_proj_Item2);    
+        }
+            h_Item2_X_residual.Fill(x_proj_Item2 - x_Item2);
+            h_Item2_Y_residual.Fill(y_proj_Item2 - y_Item2);
+
+            h_totalTracks_Item2.Fill(x_proj_Item2, y_proj_Item2);
+    }
+    }   
+
+   
+    }
 }
+
+
 } catch (const char msg) {
     cerr << msg << endl;
 }
