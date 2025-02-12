@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
     TF1 *f_Landau = new TF1("f_Landau", "[0]*TMath::Landau(x, [1], [2])", 0., 1000.);
     f_Landau->SetNpx(4500);
 
-    double adcMaxAxis = 500.;
+    double adcMaxAxis = 1500.;
     TH1D *h_GEM0_X_ADC1 = (TH1D*)file_in->Get("h_GEM0_X_ADC1");
     h_GEM0_X_ADC1->SetTitle(";ADC (GEM0_{X}) ");
     h_GEM0_X_ADC1->SetAxisRange(0., adcMaxAxis);
@@ -371,6 +371,7 @@ int main(int argc, char** argv) {
     c1->Print(Form("Figs/Item3_ADC_YX_%s.pdf", keyWord.c_str()));
     c1->Print(Form("Figs/Item3_ADC_YX_%s.png", keyWord.c_str()));
     c1->Print(Form("Figs/Item3_ADC_YX_%s.root", keyWord.c_str()));
+
     
     TH1D *h_Item3_ADC_X = (TH1D*)h_Item3_YX_ADC1->ProjectionX("h_Item3_ADC_X", 1, h_Item3_YX_ADC1->GetNbinsY());
     h_Item3_ADC_X->SetAxisRange(0., adcMaxAxis);
@@ -390,7 +391,7 @@ int main(int argc, char** argv) {
     c1->Print(Form("Figs/Item3_ADC_Y_%s.png", keyWord.c_str()));
     c1->Print(Form("Figs/Item3_ADC_Y_%s.root", keyWord.c_str()));
 
-    //x vs. y plot item 2 (sara)
+    //x vs. y plot item 3 (sara)
     TH2D *h_n_Item3_Y_X_ClSize1 = (TH2D*)file_in->Get("h_n_Item3_Y_X_ClSize1");
     h_n_Item3_Y_X_ClSize1->SetTitle("; Clst_size X; Clst_size Y");
     h_n_Item3_Y_X_ClSize1->Draw();
@@ -409,6 +410,61 @@ int main(int argc, char** argv) {
     c1->Print(Form("Figs/Item3_Y_ClSize_%s.pdf", keyWord.c_str()));
     c1->Print(Form("Figs/Item3_Y_ClSize_%s.png", keyWord.c_str()));
     c1->Print(Form("Figs/Item3_Y_ClSize_%s.root", keyWord.c_str()));
+
+    //ITEM 4
+    TH2D *h_Item4_YXC1 = (TH2D*)file_in->Get("h_Item4_YXC1");
+    FormarHist_1(c1, h_Item4_YXC1);
+    h_Item4_YXC1->SetTitle(";Cluster X [cm]; Cluster Y [cm]");
+    h_Item4_YXC1->SetMaximum( 5.*h_Item4_YXC1->GetEntries()/( h_Item4_YXC1->GetNbinsX()*h_Item4_YXC1->GetNbinsY() ) );
+    h_Item4_YXC1->Draw();
+    c1->Print(Form("Figs/Item4_YXc_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_YXc_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_YXc_%s.root", keyWord.c_str()));
+    
+    TH2D *h_Item4_YX_ADC1 = (TH2D*)file_in->Get("h_Item4_YX_ADC1");
+    h_Item4_YX_ADC1->SetTitle("; ADC_X; ADC_Y");
+    h_Item4_YX_ADC1->Draw();
+    c1->Print(Form("Figs/Item4_ADC_YX_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_ADC_YX_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_ADC_YX_%s.root", keyWord.c_str()));
+
+    TH1D *h_Item4_ADC_X = (TH1D*)h_Item4_YX_ADC1->ProjectionX("h_Item4_ADC_X", 1, h_Item4_YX_ADC1->GetNbinsY());
+    h_Item4_ADC_X->SetAxisRange(0., adcMaxAxis);
+    h_Item4_ADC_X->Draw();
+    f_Landau->SetParameters(5. * h_Item4_ADC_X->GetMaximum(), h_Item4_ADC_X->GetBinCenter(h_Item4_ADC_X->GetMaximumBin()), 10);
+    h_Item4_ADC_X->Fit( f_Landau, "MeV", "", 0., adcMaxAxis );
+    c1->Print(Form("Figs/Item4_ADC_X_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_ADC_X_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_ADC_X_%s.root", keyWord.c_str()));
+
+    TH1D *h_Item4_ADC_Y = (TH1D*)h_Item4_YX_ADC1->ProjectionY("h_Item4_ADC_Y", 1, h_Item4_YX_ADC1->GetNbinsX());
+    h_Item4_ADC_Y->SetAxisRange(0., adcMaxAxis);
+    h_Item4_ADC_Y->Draw();
+    f_Landau->SetParameters(5. * h_Item4_ADC_Y->GetMaximum(), h_Item4_ADC_Y->GetBinCenter(h_Item4_ADC_Y->GetMaximumBin()), 10);
+    h_Item4_ADC_Y->Fit( f_Landau, "MeV", "", 0., adcMaxAxis );
+    c1->Print(Form("Figs/Item4_ADC_Y_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_ADC_Y_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_ADC_Y_%s.root", keyWord.c_str()));
+
+    //x vs. y plot item 4 (sara)
+    TH2D *h_n_Item4_Y_X_ClSize1 = (TH2D*)file_in->Get("h_n_Item4_Y_X_ClSize1");
+    h_n_Item4_Y_X_ClSize1->SetTitle("; Clst_size X; Clst_size Y");
+    h_n_Item4_Y_X_ClSize1->Draw();
+    c1->Print(Form("Figs/Item4_Clst_YvsX_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_Clst_YvsX_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_Clst_YvsX_%s.root", keyWord.c_str()));
+
+    TH1D *h_n_Item4_X_ClSize1 = (TH1D*)h_n_Item4_Y_X_ClSize1->ProjectionX("h_n_Item4_X_ClSize1", 1, h_n_Item4_Y_X_ClSize1->GetNbinsY());
+    h_n_Item4_X_ClSize1->Draw();
+    c1->Print(Form("Figs/Item4_X_ClSize_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_X_ClSize_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_X_ClSize_%s.root", keyWord.c_str()));
+
+    TH1D *h_n_Item4_Y_ClSize1 = (TH1D*)h_n_Item4_Y_X_ClSize1->ProjectionY("h_n_Item4_Y_ClSize1", 1, h_n_Item4_Y_X_ClSize1->GetNbinsX());
+    h_n_Item4_Y_ClSize1->Draw();
+    c1->Print(Form("Figs/Item4_Y_ClSize_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_Y_ClSize_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_Y_ClSize_%s.root", keyWord.c_str()));
 
 //efficiency
     TH2D *h_totalTracks_Item1 = (TH2D*)file_in->Get("h_totalTracks_Item1");
@@ -441,13 +497,26 @@ int main(int argc, char** argv) {
     c1->Print(Form("Figs/Item3_totalTracks_%s.png", keyWord.c_str()));
     c1->Print(Form("Figs/Item3_totalTracks_%s.root", keyWord.c_str()));
     TH2D *h_matchedHits_Item3 = (TH2D*)file_in->Get("h_matchedHits_Item3");
+
     h_matchedHits_Item3->Draw();
     c1->Print(Form("Figs/Item3_matchedHits_%s.pdf", keyWord.c_str()));
     c1->Print(Form("Figs/Item3_matchedHits_%s.png", keyWord.c_str()));
     c1->Print(Form("Figs/Item3_matchedHits_%s.root", keyWord.c_str()));
 
-    TCanvas *c2 = new TCanvas("c2", "Efficiency Plots", 1200, 400);
-    c2->Divide(3, 1);
+    TH2D *h_totalTracks_Item4 = (TH2D*)file_in->Get("h_totalTracks_Item4");
+    h_totalTracks_Item4->Draw();
+    c1->Print(Form("Figs/Item4_totalTracks_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_totalTracks_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_totalTracks_%s.root", keyWord.c_str()));
+    TH2D *h_matchedHits_Item4 = (TH2D*)file_in->Get("h_matchedHits_Item4");
+
+    h_matchedHits_Item4->Draw();
+    c1->Print(Form("Figs/Item4_matchedHits_%s.pdf", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_matchedHits_%s.png", keyWord.c_str()));
+    c1->Print(Form("Figs/Item4_matchedHits_%s.root", keyWord.c_str()));
+
+    TCanvas *c2 = new TCanvas("c2", "Efficiency Plots", 800, 400);
+    c2->Divide(2, 2);
 
     c2->cd(1);
     TH2D *h_efficiency_Item1 = (TH2D*)h_matchedHits_Item1->Clone("h_efficiency_Item1");
@@ -493,6 +562,21 @@ int main(int argc, char** argv) {
     pt3->SetTextAlign(12); 
     pt3->AddText(Form("Efficiency: %.2f%%", Efficiency_item3)); 
     pt3->Draw("same");
+
+    c2->cd(4);
+    TH2D *h_efficiency_Item4 = (TH2D*)h_matchedHits_Item4->Clone("h_efficiency_Item4");
+    h_efficiency_Item4->SetTitle("Efficiency for Item4; X [cm]; Y [cm]");
+    h_efficiency_Item4->Divide(h_totalTracks_Item4); 
+    h_efficiency_Item4->Draw("COLZ");
+
+    double totalTracks_item4 = h_totalTracks_Item4->Integral(); 
+    double matchedHits_item4 = h_matchedHits_Item4->Integral(); 
+    double Efficiency_item4 = (totalTracks_item4 > 0) ? (matchedHits_item4 / totalTracks_item4) * 100.0 : 0.0;
+    TPaveText *pt4 = new TPaveText(0.15, 0.85, 0.35, 0.9, "NDC");
+    pt4->SetFillColor(0);
+    pt4->SetTextAlign(12); 
+    pt4->AddText(Form("Efficiency: %.2f%%", Efficiency_item4)); 
+    pt4->Draw("same");
 
     c2->Print(Form("Figs/Efficiency_Plots%s.pdf", keyWord.c_str()));
     c2->Print(Form("Figs/Efficiency_Plots%s.png", keyWord.c_str()));
@@ -551,8 +635,10 @@ TCanvas *c3 = new TCanvas("c3", "ADC and Cluster Plots", 1200, 800);
     h_Item2_X_residual->Draw();
 
     c5->cd(3);
-    TH1D *h_Item3_X_residual = (TH1D*)file_in->Get("h_Item3_X_residual");
-    h_Item3_X_residual->Draw();
+    //TH1D *h_Item3_X_residual = (TH1D*)file_in->Get("h_Item3_X_residual");
+    //h_Item3_X_residual->Draw();
+    TH1D *h_Item4_X_residual = (TH1D*)file_in->Get("h_Item4_X_residual");
+    h_Item4_X_residual->Draw();
 
     c5->cd(4);
     TH1D *h_Item1_Y_residual = (TH1D*)file_in->Get("h_Item1_Y_residual");
@@ -563,12 +649,66 @@ TCanvas *c3 = new TCanvas("c3", "ADC and Cluster Plots", 1200, 800);
     h_Item2_Y_residual->Draw();
 
     c5->cd(6);
-    TH1D *h_Item3_Y_residual = (TH1D*)file_in->Get("h_Item3_Y_residual");
-    h_Item3_Y_residual->Draw();
+    //TH1D *h_Item3_Y_residual = (TH1D*)file_in->Get("h_Item3_Y_residual");
+    //h_Item3_Y_residual->Draw();
+    TH1D *h_Item4_Y_residual = (TH1D*)file_in->Get("h_Item4_Y_residual");
+    h_Item4_Y_residual->Draw();
 
     c5->Print(Form("Figs/Residual_Plots%s.pdf", keyWord.c_str()));
 
+//Filtered plots
+TCanvas *ch = new TCanvas("ch", "Filtered Plots", 1200, 1200);
+    ch->Divide(3, 3);
+    ch->cd(1);
+    TH2D *h_Item1_YX_ADC_Filtered = (TH2D*)file_in->Get("h_Item1_YX_ADC_Filtered");
+    h_Item1_YX_ADC_Filtered->SetTitle("; ADC_X; ADC_Y");
+    h_Item1_YX_ADC_Filtered->Draw();
 
+    ch->cd(2);
+    TH2D *h_Item2_YX_ADC_Filtered = (TH2D*)file_in->Get("h_Item2_YX_ADC_Filtered");
+    h_Item2_YX_ADC_Filtered->SetTitle("; ADC_X; ADC_Y");
+    h_Item2_YX_ADC_Filtered->Draw();
+
+    ch->cd(3);
+    TH2D *h_Item3_YX_ADC_Filtered = (TH2D*)file_in->Get("h_Item3_YX_ADC_Filtered");
+    h_Item3_YX_ADC_Filtered->SetTitle("; ADC_X; ADC_Y");
+    h_Item3_YX_ADC_Filtered->Draw();
+
+    ch->cd(4);
+    TH2D *h_Item1_YXC_Filtered = (TH2D*)file_in->Get("h_Item1_YXC_Filtered");
+    h_Item1_YXC_Filtered->SetTitle(";Cluster X [cm]; Cluster Y [cm]");
+    h_Item1_YXC_Filtered->Draw();
+
+    ch->cd(5);
+    TH2D *h_Item2_YXC_Filtered = (TH2D*)file_in->Get("h_Item2_YXC_Filtered");
+    h_Item2_YXC_Filtered->SetTitle(";Cluster X [cm]; Cluster Y [cm]");
+    h_Item2_YXC_Filtered->Draw();
+
+    ch->cd(6);
+    TH2D *h_Item3_YXC_Filtered = (TH2D*)file_in->Get("h_Item3_YXC_Filtered");
+    h_Item3_YXC_Filtered->SetTitle(";Cluster X [cm]; Cluster Y [cm]");
+    h_Item3_YXC_Filtered->Draw();
+
+    ch->cd(7);
+    //TH2D *h_Item1_YXC_residualFiltered = (TH2D*)file_in->Get("h_Item1_YXC_residualFiltered");
+    TH2D *h_GEM0_YXC_residualFiltered = (TH2D*)file_in->Get("h_GEM0_YXC_residualFiltered");
+    h_GEM0_YXC_residualFiltered->SetTitle(";Cluster X [cm]; Cluster Y [cm]");
+    h_GEM0_YXC_residualFiltered->Draw();
+
+    ch->cd(8);
+    TH2D *h_Item2_YXC_residualFiltered = (TH2D*)file_in->Get("h_Item2_YXC_residualFiltered");
+    h_Item2_YXC_residualFiltered->SetTitle(";Cluster X [cm]; Cluster Y [cm]");
+    h_Item2_YXC_residualFiltered->Draw();
+
+    ch->cd(9);
+    //TH2D *h_Item3_YXC_residualFiltered = (TH2D*)file_in->Get("h_Item3_YXC_residualFiltered");
+    TH2D *h_GEM1_YXC_residualFiltered = (TH2D*)file_in->Get("h_GEM1_YXC_residualFiltered");
+    h_GEM1_YXC_residualFiltered->SetTitle(";Cluster X [cm]; Cluster Y [cm]");
+    h_GEM1_YXC_residualFiltered->Draw();
+
+
+    ch->Print(Form("Figs/ADC_Filtered%s.pdf", keyWord.c_str()));
+ 
     
 
 

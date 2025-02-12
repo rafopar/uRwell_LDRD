@@ -62,10 +62,10 @@ int main(int argc, char **argv) {
     cout << "The hit threshold is " << threshold << "\\sigma" << endl;
     cout << "The Minimum cluster size is " << MinClSize << "hits" << endl;
 
-    std::map<int, std::vector<int> > mv_runs;
-    mv_runs[1] = {2560, 2558, 2556, 2553, 2549, 2547};
+   
 
-    //std::map<int, int> mv_runs;
+    std::vector<int> v_runs;
+
     std::map<int, double> m_MESH_HV; // The key is the run number, the value is the MESH_HV
     std::map<int, double> m_Cathode_HV; // The key is the run number, the value is the Cathode_HV
     std::map<int, double> m_Drift_HV; // The key is the run number, the value is the Drift_HV = Hathode_HV - MESH_HV
@@ -92,6 +92,8 @@ int main(int argc, char **argv) {
 
                 inp_HVTable >> run >> HV_MESH >> HV_Cathode;
 
+                v_runs.push_back(run);
+
                 cout << run << "  " << HV_MESH << "   " << HV_Cathode << endl;
                 m_MESH_HV[run] = HV_MESH;
                 m_Cathode_HV[run] = HV_Cathode;
@@ -106,9 +108,9 @@ int main(int argc, char **argv) {
         TGraph *effGraph_Item2 = new TGraph();
         TGraph *effGraph_Item3 = new TGraph();
         
-    for (int i = 0; i < mv_runs[series].size(); i++) {
+    for (int i = 0; i < v_runs.size(); i++) {
 
-            int run = mv_runs[series].at(i);
+            int run = v_runs.at(i);
 
             TFile *file_in = new TFile(Form("AnaData_%d_Thr_%1.1f_MinHits_%d.root", run, threshold, MinClSize), "Read");
 
@@ -149,7 +151,7 @@ int main(int argc, char **argv) {
 
 
     TCanvas *c2 = new TCanvas("c2", "Efficiency vs HV", 1200, 400);
-    c2->Divide(3, 1);
+    c2->Divide(2, 1);
 
     c2->cd(1);
     effGraph_Item1->SetTitle("Efficiency vs HV (Item1); HV [V]; Efficiency [%]");
@@ -159,9 +161,9 @@ int main(int argc, char **argv) {
     effGraph_Item2->SetTitle("Efficiency vs HV (Item2); HV [V]; Efficiency [%]");
     effGraph_Item2->Draw("ALP");
 
-    c2->cd(3);
+    /*c2->cd(3);
     effGraph_Item3->SetTitle("Efficiency vs HV (Item3); HV [V]; Efficiency [%]");
-    effGraph_Item3->Draw("ALP");
+    effGraph_Item3->Draw("ALP");*/
 
     c2->Print("Efficiency_vs_HV.pdf");
 
