@@ -40,9 +40,9 @@ edit the file `cmake_modules/FindLZ4.cmake` and in particular to replace locatio
 
 To install the software 
 
-`cmake -S . -Bbuild - DCMAKE_INSTALL_PREFIX=/Path/where/You/Want/Files/ToBe/Installed/`
-`cmake --build build`
-`cmake --install build`
+* `cmake -S . -Bbuild -DCMAKE_INSTALL_PREFIX=/Path/where/You/Want/Files/ToBe/Installed/`
+* `cmake --build build`
+* `cmake --install build`
 
 When your installation is finished, the directory following directory structures will be created in the installation directory
 
