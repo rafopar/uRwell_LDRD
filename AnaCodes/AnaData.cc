@@ -118,6 +118,9 @@ int main(int argc, char** argv) {
     TH2D h_GEM0_YX_peaktime1("h_GEM0_YX_peaktime1", "", 10, -0.5, 9.5, 10, -0.5, 9.5);
     TH2D h_GEM1_YX_peaktime1("h_GEM1_YX_peaktime1", "", 10, -0.5, 9.5, 10, -0.5, 9.5);
 
+    TH2D h_GEM0_clSize_YX1("h_GEM0_clSize_YX1", "", 16, -0.5, 15.5, 16, -0.5, 15.5);
+    TH2D h_GEM1_clSize_YX1("h_GEM1_clSize_YX1", "", 16, -0.5, 15.5, 16, -0.5, 15.5);
+    
     TH1D h_th_GEMTrk1("h_th_GEMTrk1", "", 200, -30., 30.);
     TH1D h_cos2Th_GEMTrk1("h_cos2Th_GEMTrk1", "", 200, 0.9, 1.05);
 
@@ -300,6 +303,15 @@ int main(int argc, char** argv) {
         h_GEM0_Y_ADC1.Fill(GEM0_YCluster.getPeakADC());
         h_GEM0_YXC1.Fill(GEM0_X, GEM0_Y);
         h_GEM0_YX_peaktime1.Fill(GEM0_XCluster.getPeakTime(), GEM0_YCluster.getPeakTime());
+        
+        int GEM0_Y_clSize = GEM0_YCluster.getHits()->size();
+        int GEM0_X_clSize = GEM0_XCluster.getHits()->size();
+
+        int GEM1_Y_clSize = GEM1_YCluster.getHits()->size();
+        int GEM1_X_clSize = GEM1_XCluster.getHits()->size();
+        
+        h_GEM0_clSize_YX1.Fill(GEM0_X_clSize, GEM0_Y_clSize);
+        h_GEM1_clSize_YX1.Fill(GEM1_X_clSize, GEM1_Y_clSize);
     }
 
 

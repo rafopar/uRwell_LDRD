@@ -43,7 +43,8 @@ int main(int argc, char** argv) {
     const int nMaxEventsToProcess = 2000;
     const int MaxChPerDet = 512; // No detector has more than 512 channels
     const int MaxChePerLayer = 256; // No detector has more than 256 channels per layer
-    const int n_ts = 9;
+    //const int n_ts = 9;
+    const int n_ts = 6;
     const int n_MaxDet = 6; // The maximum number of detectors
     const int n_MaxUniqueChannels = n_MaxDet*MaxChPerDet;
     const int nSlot = 16;

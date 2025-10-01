@@ -92,7 +92,8 @@ int main(int argc, char** argv) {
     int __bank_Ped_INDEX_ = buRWellADC.getSchema().getEntryOrder("ped");
 
     const double sigm_threshold = 3.; // Represents the threshold of the ADC in units of the sigma.
-    const int n_ts = 9;
+    //const int n_ts = 9;
+    const int n_ts = 6;
     const int MaxChPerDet = 512; // No detector has more than 512 channels
     const int MaxChePerLayer = 256; // No detector has more than 256 channels per layer
 
@@ -174,8 +175,10 @@ int main(int argc, char** argv) {
                     m_Hit_temp[ uniqueChan ] = tmpHit;
                 }
 
-                if (m_ped_mean[uniqueChan] - ADC > m_MaxADC[uniqueChan]) {
-                    m_MaxADC[uniqueChan] = m_ped_mean[uniqueChan] - ADC;
+                //if (m_ped_mean[uniqueChan] - ADC > m_MaxADC[uniqueChan]) {
+                if ( ADC - m_ped_mean[uniqueChan] > m_MaxADC[uniqueChan]) {
+                    //m_MaxADC[uniqueChan] = m_ped_mean[uniqueChan] - ADC;
+                    m_MaxADC[uniqueChan] = ADC - m_ped_mean[uniqueChan];
                     m_ts[uniqueChan] = ts;
                 }
 
@@ -186,7 +189,8 @@ int main(int argc, char** argv) {
 
             for (auto it = m_ADC.begin(); it != m_ADC.end(); ++it) {
                 int ch = it->first;
-                m_ADC[ch] = m_ped_mean[ch] - m_ADC[ch] / double(n_ts);
+                //m_ADC[ch] = m_ped_mean[ch] - m_ADC[ch] / double(n_ts);
+                m_ADC[ch] = m_ADC[ch] / double(n_ts) - m_ped_mean[ch];
                 m_ADCRel[ch] = m_ADC[ch] / m_ped_rms[ch];
 
                 if (m_ADCRel[ch] > sigm_threshold) {
